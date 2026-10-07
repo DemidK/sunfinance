@@ -1,0 +1,44 @@
+services:
+  php:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    environment:
+      APP_ENV: ${APP_ENV:-dev}
+      DATABASE_URL: "postgresql://${POSTGRES_USER:-fin_events}:${POSTGRES_PASSWORD:-fin_events}@database:5432/${POSTGRES_DB:-fin_events}?serverVersion=18&charset=utf8"
+    volumes:
+      - ./:/app
+      - /app/vendor
+    depends_on:
+      database:
+        condition: service_healthy
+
+  nginx:
+    image: nginx:1.27-alpine
+    ports:
+      - "${HTTP_PORT:-8080}:80"
+    volumes:
+      - ./public:/app/public:ro
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - php
+
+  database:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-fin_events}
+      POSTGRES_USER: ${POSTGRES_USER:-fin_events}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-fin_events}
+    healthcheck:
+      test: ["CMD", "pg_isready", "-d", "${POSTGRES_DB:-fin_events}", "-U", "${POSTGRES_USER:-fin_events}"]
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    ports:
+      - "${POSTGRES_PORT:-5433}:5432"
+    volumes:
+      - database_data:/var/lib/postgresql/data:rw
+      - ./docker/postgres/init-test-db.sql:/docker-entrypoint-initdb.d/init-test-db.sql:ro
+
+volumes:
+  database_data:

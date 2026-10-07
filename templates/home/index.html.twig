@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Financial Events API{% endblock %}
+
+{% block stylesheets %}
+    <style>
+        :root { color-scheme: light dark; }
+        body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: #f6f7f9; color: #1f2328; }
+        @media (prefers-color-scheme: dark) { body { background: #0d1117; color: #e6edf3; } .card { background: #161b22 !important; border-color: #30363d !important; } code { background: #21262d !important; } }
+        main { max-width: 720px; margin: 10vh auto; padding: 0 1.5rem; }
+        .card { background: #fff; border: 1px solid #d0d7de; border-radius: 12px; padding: 2rem; }
+        h1 { margin: 0 0 .5rem; font-size: 1.75rem; }
+        p.lead { margin: 0 0 1.5rem; opacity: .75; }
+        dl { display: grid; grid-template-columns: max-content 1fr; gap: .4rem 1.25rem; margin: 0 0 1.5rem; }
+        dt { font-weight: 600; } dd { margin: 0; }
+        code { background: #eef1f4; padding: .1rem .4rem; border-radius: 4px; font-size: .9em; }
+        ul { margin: 0; padding-left: 1.2rem; } li { margin: .25rem 0; }
+        .ok { color: #1a7f37; font-weight: 600; }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <main>
+        <div class="card">
+            <h1>Financial Events API</h1>
+            <p class="lead">REST service for processing financial events into double-entry accounting transactions.</p>
+
+            <dl>
+                <dt>Status</dt><dd><span class="ok">Application is running</span></dd>
+                <dt>PHP</dt><dd>{{ php_version }}</dd>
+                <dt>Symfony</dt><dd>{{ symfony_version }}</dd>
+                <dt>Environment</dt><dd>{{ environment }}</dd>
+            </dl>
+
+            <p><strong>Endpoints (planned)</strong></p>
+            <ul>
+                <li><code>POST /events</code> — accept a financial event</li>
+                <li><code>GET /accounts/{id}/balance</code> — account balance</li>
+                <li><code>GET /accounts/{id}/transactions</code> — account transactions</li>
+            </ul>
+        </div>
+    </main>
+{% endblock %}

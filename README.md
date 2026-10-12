@@ -1,5 +1,17 @@
 # Financial Events API
 
+> **Author's note: deviations from the assignment**
+>
+> - **No duplicate check at intake.** Every valid notification is stored and handed to the worker,
+>   so the endpoint does no lookups and incoming traffic is never slowed down. If processing
+>   fails, the worker retries it and finally parks it in the `failed` transport, so an accepted
+>   notification is never lost.
+> - **Duplicates are detected by the worker.** A repeated event id is not rejected. The worker
+>   marks it `duplicate` and writes no postings.
+> - **The events endpoint supports several providers.** It is `POST /events/{provider}` instead of
+>   a single fixed endpoint. A new provider needs a case in the `Provider` enum and a payload class
+>   with its own validation rules. Controller, storage and processing stay unchanged.
+
 REST service that accepts financial events and turns them into double-entry accounting
 transactions (test assignment).
 

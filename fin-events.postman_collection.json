@@ -1,0 +1,1836 @@
+{
+  "info": {
+    "name": "fin-events: notifications",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:8080"
+    },
+    {
+      "key": "account",
+      "value": "user_account"
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "pm.variables.set(\"eventId\", \"evt-\" + Date.now() + \"-\" + Math.floor(Math.random() * 1e6));",
+          "pm.variables.set(\"now\", new Date().toISOString().replace(\"Z\", \"+00:00\"));"
+        ]
+      }
+    }
+  ],
+  "item": [
+    {
+      "name": "Bank — happy path",
+      "description": "Valid bank notifications for every event type, amount and date format. Each expects 202.",
+      "item": [
+        {
+          "name": "payment_received",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 202\", () => pm.response.to.have.status(202));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"empty body\", () => pm.expect(pm.response.text()).to.eql(\"\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"{{eventId}}\",\n  \"type\": \"payment_received\",\n  \"amount\": 125.5,\n  \"currency\": \"USD\",\n  \"timestamp\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "payment_sent",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 202\", () => pm.response.to.have.status(202));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"empty body\", () => pm.expect(pm.response.text()).to.eql(\"\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"{{eventId}}\",\n  \"type\": \"payment_sent\",\n  \"amount\": 40,\n  \"currency\": \"USD\",\n  \"timestamp\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "fee_charged",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 202\", () => pm.response.to.have.status(202));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"empty body\", () => pm.expect(pm.response.text()).to.eql(\"\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"{{eventId}}\",\n  \"type\": \"fee_charged\",\n  \"amount\": 1.5,\n  \"currency\": \"USD\",\n  \"timestamp\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "amount as numeric string",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 202\", () => pm.response.to.have.status(202));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"empty body\", () => pm.expect(pm.response.text()).to.eql(\"\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"{{eventId}}\",\n  \"type\": \"payment_received\",\n  \"amount\": \"99.99\",\n  \"currency\": \"USD\",\n  \"timestamp\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "lowercase currency",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 202\", () => pm.response.to.have.status(202));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"empty body\", () => pm.expect(pm.response.text()).to.eql(\"\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"{{eventId}}\",\n  \"type\": \"payment_received\",\n  \"amount\": 125.5,\n  \"currency\": \"eur\",\n  \"timestamp\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "date ATOM",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 202\", () => pm.response.to.have.status(202));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"empty body\", () => pm.expect(pm.response.text()).to.eql(\"\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"{{eventId}}\",\n  \"type\": \"payment_received\",\n  \"amount\": 125.5,\n  \"currency\": \"USD\",\n  \"timestamp\": \"2026-10-12T10:00:00+00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "date with microseconds",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 202\", () => pm.response.to.have.status(202));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"empty body\", () => pm.expect(pm.response.text()).to.eql(\"\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"{{eventId}}\",\n  \"type\": \"payment_received\",\n  \"amount\": 125.5,\n  \"currency\": \"USD\",\n  \"timestamp\": \"2026-10-12T10:00:00.123456+00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "date with milliseconds",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 202\", () => pm.response.to.have.status(202));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"empty body\", () => pm.expect(pm.response.text()).to.eql(\"\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"{{eventId}}\",\n  \"type\": \"payment_received\",\n  \"amount\": 125.5,\n  \"currency\": \"USD\",\n  \"timestamp\": \"2026-10-12T10:00:00.123+00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "date Y-m-d H:i:s",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 202\", () => pm.response.to.have.status(202));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"empty body\", () => pm.expect(pm.response.text()).to.eql(\"\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"{{eventId}}\",\n  \"type\": \"payment_received\",\n  \"amount\": 125.5,\n  \"currency\": \"USD\",\n  \"timestamp\": \"2026-10-12 10:00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "date Y-m-d H:i:sP",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 202\", () => pm.response.to.have.status(202));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"empty body\", () => pm.expect(pm.response.text()).to.eql(\"\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"{{eventId}}\",\n  \"type\": \"payment_received\",\n  \"amount\": 125.5,\n  \"currency\": \"USD\",\n  \"timestamp\": \"2026-10-12 10:00:00+03:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Card — happy path",
+      "description": "Valid card notifications for every status. Amount is an integer in minor units. Each expects 202.",
+      "item": [
+        {
+          "name": "received",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 202\", () => pm.response.to.have.status(202));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"empty body\", () => pm.expect(pm.response.text()).to.eql(\"\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/card",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "card"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transaction\": \"{{eventId}}\",\n  \"status\": \"received\",\n  \"amount\": 12550,\n  \"currency\": \"USD\",\n  \"time\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "sent",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 202\", () => pm.response.to.have.status(202));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"empty body\", () => pm.expect(pm.response.text()).to.eql(\"\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/card",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "card"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transaction\": \"{{eventId}}\",\n  \"status\": \"sent\",\n  \"amount\": 4000,\n  \"currency\": \"USD\",\n  \"time\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "fee",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 202\", () => pm.response.to.have.status(202));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"empty body\", () => pm.expect(pm.response.text()).to.eql(\"\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/card",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "card"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transaction\": \"{{eventId}}\",\n  \"status\": \"fee\",\n  \"amount\": 150,\n  \"currency\": \"USD\",\n  \"time\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "time with milliseconds",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 202\", () => pm.response.to.have.status(202));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"empty body\", () => pm.expect(pm.response.text()).to.eql(\"\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/card",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "card"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transaction\": \"{{eventId}}\",\n  \"status\": \"received\",\n  \"amount\": 12550,\n  \"currency\": \"USD\",\n  \"time\": \"2026-10-12T10:00:00.123+00:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Bank — validation 422",
+      "description": "Invalid bank payloads. Each expects 422 with a non-empty violations array of {field, message}.",
+      "item": [
+        {
+          "name": "empty object",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 422\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });",
+                  "pm.test(\"violations present\", () => { const v = pm.response.json().violations; pm.expect(v).to.be.an(\"array\").that.is.not.empty; v.forEach(x => { pm.expect(x.field).to.be.a(\"string\"); pm.expect(x.message).to.be.a(\"string\"); }); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "missing event_id",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 422\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });",
+                  "pm.test(\"violations present\", () => { const v = pm.response.json().violations; pm.expect(v).to.be.an(\"array\").that.is.not.empty; v.forEach(x => { pm.expect(x.field).to.be.a(\"string\"); pm.expect(x.message).to.be.a(\"string\"); }); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"type\": \"payment_received\",\n  \"amount\": 125.5,\n  \"currency\": \"USD\",\n  \"timestamp\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "unknown type",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 422\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });",
+                  "pm.test(\"violations present\", () => { const v = pm.response.json().violations; pm.expect(v).to.be.an(\"array\").that.is.not.empty; v.forEach(x => { pm.expect(x.field).to.be.a(\"string\"); pm.expect(x.message).to.be.a(\"string\"); }); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"{{eventId}}\",\n  \"type\": \"refund\",\n  \"amount\": 125.5,\n  \"currency\": \"USD\",\n  \"timestamp\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "amount zero",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 422\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });",
+                  "pm.test(\"violations present\", () => { const v = pm.response.json().violations; pm.expect(v).to.be.an(\"array\").that.is.not.empty; v.forEach(x => { pm.expect(x.field).to.be.a(\"string\"); pm.expect(x.message).to.be.a(\"string\"); }); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"{{eventId}}\",\n  \"type\": \"payment_received\",\n  \"amount\": 0,\n  \"currency\": \"USD\",\n  \"timestamp\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "amount negative",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 422\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });",
+                  "pm.test(\"violations present\", () => { const v = pm.response.json().violations; pm.expect(v).to.be.an(\"array\").that.is.not.empty; v.forEach(x => { pm.expect(x.field).to.be.a(\"string\"); pm.expect(x.message).to.be.a(\"string\"); }); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"{{eventId}}\",\n  \"type\": \"payment_received\",\n  \"amount\": -10,\n  \"currency\": \"USD\",\n  \"timestamp\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "amount not numeric",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 422\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });",
+                  "pm.test(\"violations present\", () => { const v = pm.response.json().violations; pm.expect(v).to.be.an(\"array\").that.is.not.empty; v.forEach(x => { pm.expect(x.field).to.be.a(\"string\"); pm.expect(x.message).to.be.a(\"string\"); }); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"{{eventId}}\",\n  \"type\": \"payment_received\",\n  \"amount\": \"abc\",\n  \"currency\": \"USD\",\n  \"timestamp\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "currency too long",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 422\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });",
+                  "pm.test(\"violations present\", () => { const v = pm.response.json().violations; pm.expect(v).to.be.an(\"array\").that.is.not.empty; v.forEach(x => { pm.expect(x.field).to.be.a(\"string\"); pm.expect(x.message).to.be.a(\"string\"); }); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"{{eventId}}\",\n  \"type\": \"payment_received\",\n  \"amount\": 125.5,\n  \"currency\": \"EURO\",\n  \"timestamp\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "currency too short",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 422\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });",
+                  "pm.test(\"violations present\", () => { const v = pm.response.json().violations; pm.expect(v).to.be.an(\"array\").that.is.not.empty; v.forEach(x => { pm.expect(x.field).to.be.a(\"string\"); pm.expect(x.message).to.be.a(\"string\"); }); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"{{eventId}}\",\n  \"type\": \"payment_received\",\n  \"amount\": 125.5,\n  \"currency\": \"EU\",\n  \"timestamp\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "timestamp wrong format",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 422\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });",
+                  "pm.test(\"violations present\", () => { const v = pm.response.json().violations; pm.expect(v).to.be.an(\"array\").that.is.not.empty; v.forEach(x => { pm.expect(x.field).to.be.a(\"string\"); pm.expect(x.message).to.be.a(\"string\"); }); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"{{eventId}}\",\n  \"type\": \"payment_received\",\n  \"amount\": 125.5,\n  \"currency\": \"USD\",\n  \"timestamp\": \"12.10.2026\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "timestamp as number",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 422\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });",
+                  "pm.test(\"violations present\", () => { const v = pm.response.json().violations; pm.expect(v).to.be.an(\"array\").that.is.not.empty; v.forEach(x => { pm.expect(x.field).to.be.a(\"string\"); pm.expect(x.message).to.be.a(\"string\"); }); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"{{eventId}}\",\n  \"type\": \"payment_received\",\n  \"amount\": 125.5,\n  \"currency\": \"USD\",\n  \"timestamp\": 1760263200\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "event_id longer than 255",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 422\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });",
+                  "pm.test(\"violations present\", () => { const v = pm.response.json().violations; pm.expect(v).to.be.an(\"array\").that.is.not.empty; v.forEach(x => { pm.expect(x.field).to.be.a(\"string\"); pm.expect(x.message).to.be.a(\"string\"); }); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\",\n  \"type\": \"payment_received\",\n  \"amount\": 125.5,\n  \"currency\": \"USD\",\n  \"timestamp\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Card — validation 422",
+      "description": "Invalid card payloads. Each expects 422 with a non-empty violations array of {field, message}.",
+      "item": [
+        {
+          "name": "fractional amount",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 422\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });",
+                  "pm.test(\"violations present\", () => { const v = pm.response.json().violations; pm.expect(v).to.be.an(\"array\").that.is.not.empty; v.forEach(x => { pm.expect(x.field).to.be.a(\"string\"); pm.expect(x.message).to.be.a(\"string\"); }); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/card",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "card"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transaction\": \"{{eventId}}\",\n  \"status\": \"received\",\n  \"amount\": 125.5,\n  \"currency\": \"USD\",\n  \"time\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "amount as string",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 422\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });",
+                  "pm.test(\"violations present\", () => { const v = pm.response.json().violations; pm.expect(v).to.be.an(\"array\").that.is.not.empty; v.forEach(x => { pm.expect(x.field).to.be.a(\"string\"); pm.expect(x.message).to.be.a(\"string\"); }); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/card",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "card"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transaction\": \"{{eventId}}\",\n  \"status\": \"received\",\n  \"amount\": \"12550\",\n  \"currency\": \"USD\",\n  \"time\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "amount zero",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 422\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });",
+                  "pm.test(\"violations present\", () => { const v = pm.response.json().violations; pm.expect(v).to.be.an(\"array\").that.is.not.empty; v.forEach(x => { pm.expect(x.field).to.be.a(\"string\"); pm.expect(x.message).to.be.a(\"string\"); }); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/card",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "card"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transaction\": \"{{eventId}}\",\n  \"status\": \"received\",\n  \"amount\": 0,\n  \"currency\": \"USD\",\n  \"time\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "unknown status",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 422\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });",
+                  "pm.test(\"violations present\", () => { const v = pm.response.json().violations; pm.expect(v).to.be.an(\"array\").that.is.not.empty; v.forEach(x => { pm.expect(x.field).to.be.a(\"string\"); pm.expect(x.message).to.be.a(\"string\"); }); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/card",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "card"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transaction\": \"{{eventId}}\",\n  \"status\": \"refund\",\n  \"amount\": 12550,\n  \"currency\": \"USD\",\n  \"time\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "missing transaction",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 422\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });",
+                  "pm.test(\"violations present\", () => { const v = pm.response.json().violations; pm.expect(v).to.be.an(\"array\").that.is.not.empty; v.forEach(x => { pm.expect(x.field).to.be.a(\"string\"); pm.expect(x.message).to.be.a(\"string\"); }); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/card",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "card"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"received\",\n  \"amount\": 12550,\n  \"currency\": \"USD\",\n  \"time\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "time wrong format",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 422\", () => pm.response.to.have.status(422));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });",
+                  "pm.test(\"violations present\", () => { const v = pm.response.json().violations; pm.expect(v).to.be.an(\"array\").that.is.not.empty; v.forEach(x => { pm.expect(x.field).to.be.a(\"string\"); pm.expect(x.message).to.be.a(\"string\"); }); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/card",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "card"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transaction\": \"{{eventId}}\",\n  \"status\": \"received\",\n  \"amount\": 12550,\n  \"currency\": \"USD\",\n  \"time\": \"2026/10/12 10:00\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Malformed 400",
+      "description": "Bodies that are not a JSON object. Each expects 400.",
+      "item": [
+        {
+          "name": "broken JSON",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\"event_id\":",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "empty body",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "JSON string",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 400\", () => pm.response.to.have.status(400));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "\"hello\"",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Routing",
+      "description": "Unknown provider and wrong HTTP method.",
+      "item": [
+        {
+          "name": "unknown provider",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 404\", () => pm.response.to.have.status(404));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/paypal",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "paypal"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event_id\": \"{{eventId}}\",\n  \"type\": \"payment_received\",\n  \"amount\": 125.5,\n  \"currency\": \"USD\",\n  \"timestamp\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "GET not allowed",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 405\", () => pm.response.to.have.status(405));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"json error\", () => { pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\"); pm.expect(pm.response.json().error).to.be.a(\"string\"); });"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/events/bank",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "bank"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "End-to-end",
+      "description": "Sends a card notification and checks that the async worker updated balance and transactions.",
+      "item": [
+        {
+          "name": "balance before",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "setTimeout(() => {}, 5000);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "const b = pm.response.json().balances.find(x => x.currency === \"USD\");",
+                  "pm.collectionVariables.set(\"usdBefore\", b ? b.balance : \"0.00\");"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{account}}/balance",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "{{account}}",
+                "balance"
+              ]
+            }
+          }
+        },
+        {
+          "name": "send card received 100.00 USD",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.collectionVariables.set(\"e2eTx\", pm.variables.get(\"eventId\"));"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 202\", () => pm.response.to.have.status(202));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"empty body\", () => pm.expect(pm.response.text()).to.eql(\"\"));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/events/card",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "events",
+                "card"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"transaction\": \"{{eventId}}\",\n  \"status\": \"received\",\n  \"amount\": 10000,\n  \"currency\": \"USD\",\n  \"time\": \"{{now}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "balance after",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "setTimeout(() => {}, 3000);"
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "const b = pm.response.json().balances.find(x => x.currency === \"USD\");",
+                  "const before = parseFloat(pm.collectionVariables.get(\"usdBefore\"));",
+                  "pm.test(\"USD balance grew by 100.00\", () => pm.expect(Math.round((parseFloat(b.balance) - before) * 100) / 100).to.eql(100));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{account}}/balance",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "{{account}}",
+                "balance"
+              ]
+            }
+          }
+        },
+        {
+          "name": "transaction recorded",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test(\"status 200\", () => pm.response.to.have.status(200));",
+                  "pm.test(\"response time < 1000ms\", () => pm.expect(pm.response.responseTime).to.be.below(1000));",
+                  "pm.test(\"event present in transactions\", () => pm.expect(pm.response.json().items.map(i => i.event_id)).to.include(pm.collectionVariables.get(\"e2eTx\")));"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/accounts/{{account}}/transactions?currency=USD&limit=5",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "accounts",
+                "{{account}}",
+                "transactions"
+              ],
+              "query": [
+                {
+                  "key": "currency",
+                  "value": "USD"
+                },
+                {
+                  "key": "limit",
+                  "value": "5"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

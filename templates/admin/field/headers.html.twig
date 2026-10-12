@@ -1,0 +1,15 @@
+{% set headers = field.value %}
+{% if headers is empty %}
+    <span class="badge badge-outline">Null</span>
+{% else %}
+    <table class="table table-sm mb-0" style="font-size: .85rem;">
+        <tbody>
+        {% for name, value in headers %}
+            <tr>
+                <th class="text-nowrap pe-3" style="width: 1%; font-weight: 600;">{{ name }}</th>
+                <td style="word-break: break-all;">{{ value }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endif %}

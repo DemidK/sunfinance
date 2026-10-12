@@ -1,0 +1,7 @@
+{% set status = field.value %}
+{% if status is null %}
+    <span class="badge badge-secondary">no response</span>
+{% else %}
+    {% set color = status < 300 ? 'success' : (status < 500 ? 'warning' : 'danger') %}
+    <span class="badge badge-{{ color }}">{{ status }}</span>
+{% endif %}

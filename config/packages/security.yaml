@@ -1,0 +1,33 @@
+security:
+    password_hashers:
+        Symfony\Component\Security\Core\User\InMemoryUser: plaintext
+
+    providers:
+        admin_users:
+            memory:
+                users:
+                    test: { password: test, roles: [ROLE_ADMIN] }
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt)|css|images|js)/
+            security: false
+        admin:
+            pattern: ^/admin
+            lazy: true
+            provider: admin_users
+            form_login:
+                login_path: admin_login
+                check_path: admin_login
+                default_target_path: admin
+                enable_csrf: true
+            logout:
+                path: admin_logout
+                target: admin_login
+        main:
+            lazy: true
+            security: false
+
+    access_control:
+        - { path: ^/admin/login$, roles: PUBLIC_ACCESS }
+        - { path: ^/admin, roles: ROLE_ADMIN }

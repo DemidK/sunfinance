@@ -1,7 +1,7 @@
 FROM php:8.3-fpm-alpine
 
 RUN apk add --no-cache icu-dev libzip-dev postgresql-dev git unzip \
-    && docker-php-ext-install -j"$(nproc)" intl pdo_pgsql opcache zip \
+    && docker-php-ext-install -j"$(nproc)" bcmath intl pdo_pgsql opcache zip \
     && apk del --no-cache icu-dev libzip-dev \
     && apk add --no-cache icu-libs libzip libpq
 

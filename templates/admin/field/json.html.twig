@@ -1,0 +1,8 @@
+{% set value = field.value %}
+{% if value is iterable %}
+    {% set text = value|json_encode(constant('JSON_PRETTY_PRINT') b-or constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_UNESCAPED_UNICODE')) %}
+{% else %}
+    {% set decoded = value is empty ? null : (value|json_decode) %}
+    {% set text = decoded is null ? value : decoded|json_encode(constant('JSON_PRETTY_PRINT') b-or constant('JSON_UNESCAPED_SLASHES') b-or constant('JSON_UNESCAPED_UNICODE')) %}
+{% endif %}
+<pre class="mb-0 p-2 border rounded" style="white-space: pre-wrap; word-break: break-all; font-size: .85rem; max-height: 420px; overflow: auto;">{{ text }}</pre>
